@@ -1,0 +1,52 @@
+server:
+  port: 8081
+  tomcat:
+    #Character encoding to use to decode the URI.
+    uri-encoding: UTF-8
+    #Maximum number of connections that the server accepts and processes at any given time.
+    #Once the limit has been reached, the operating system may still accept connections based on the "acceptCount" property.
+    #Tomcat的最大连接数，默认是8192
+    #当连接数大于maxConnections+acceptCount + 1时，
+    #新来的请求不会收到服务器拒绝连接响应，而是不会和新的请求进行3次握手建立连接，一段时间后（客户端的超时时间或者Tomcat的连接超时时间后）会出现请求连接超时。
+    max-connections: 8192
+    #Maximum queue length for incoming connection requests when all possible request processing threads are in use.
+    #Tomcat的连接等待队列长度，默认是100
+    accept-count: 100
+    #Amount of time the connector will wait, after accepting a connection, for the request URI line to be presented.
+    #Tomcat的连接超时时间，默认是20s 默认单位是毫秒
+    connection-timeout: 5s
+    #长连接的超时时间。设置为 -1 时不会超时。
+    keep-alive-timeout: 20000
+    #在连接关闭之前可以进行流水线处理的最大HTTP请求数量。
+    #当设置为0或1时，禁用keep-alive和流水线处理。当设置为-1时，允许无限数量的流水线处理或keep-alive请求。
+    max-keep-alive-requests: 100
+    #Maximum size of the form content in any HTTP post request
+    max-http-form-post-size: 10MB
+    threads:
+      #Maximum amount of worker threads.
+      #Tomcat的最大线程数，默认是200
+      max: 200
+      #Minimum amount of worker threads.
+      #Tomcat的最小工作线程数，默认是10
+      min-spare: 10
+  servlet:
+    encoding:
+      charset: UTF-8
+    context-path: /lining/wonder
+
+spring:
+  application:
+    name: lining-wonder
+  servlet:
+    multipart:
+      #Max file size.
+      max-file-size: 50MB
+      #Max request size.
+      max-request-size: 10MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+logging:
+  level:
+    root: debug

@@ -1,0 +1,104 @@
+server:
+  port: 8081
+  undertow:
+    threads:
+      #IO线程数 一般设置为cpu核数*2   4 124   8 256
+      io: 8
+      #工作线程数  根据实际的工作负载定
+      worker: 256
+    #单位是字节
+    buffer-size: 16364
+    #是否分配直接内存
+    direct-buffers: true
+    #max-http-post-size: 1000
+    #max-headers: 200
+    #max-parameters: 200
+    #max-cookies: 200
+    accesslog:
+      enabled: true
+      dir: logs
+      pattern: combined
+      prefix: access-log
+      suffix: .log
+    no-request-timeout: -1
+
+  servlet:
+    encoding:
+      charset: UTF-8
+    context-path: /lining/wonder
+
+spring:
+  application:
+    name: lining-wonder
+  servlet:
+    multipart:
+      #Max file size.
+      max-file-size: 50MB
+      #Max request size.
+      max-request-size: 10MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    url: jdbc:mysql://192.168.67.11:3306/lining_wonder
+    username: root
+    password: Lining@1234
+  redis:
+    host: 192.168.67.11
+    port: 6379
+    password: lining
+    database: 5
+    lettuce:
+      pool:
+        # 连接池最大连接数
+        max-active: 200
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        # 连接池中的最小空闲连接
+        min-idle: 5
+
+logging:
+  level:
+    root: debug
+
+# MyBatis配置
+mybatis-flex:
+  # 搜索指定包别名
+  type-aliases-package: com.lining.wonder.domain
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapper-locations: classpath*:/mapper/*.xml
+  configuration:
+    # 查询为null的赋值策略
+    call-setters-on-nulls: true
+    # 自动驼峰命名规则（camel case）映射
+    mapUnderscoreToCamelCase: true
+    # MyBatis 自动映射策略
+    # NONE：不启用 PARTIAL：只对非嵌套 resultMap 自动映射 FULL：对所有 resultMap 自动映射
+    autoMappingBehavior: FULL
+    # MyBatis 自动映射时未知列或未知属性处理策
+    # NONE：不做处理 WARNING：打印相关警告 FAILING：抛出异常和详细信息
+    autoMappingUnknownColumnBehavior: NONE
+    # 原理的mybatis配置
+    cacheEnabled: true
+    defaultExecutorType: SIMPLE
+    logImpl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+sa-token:
+  # token 名称（同时也是 cookie 名称）
+  token-name: Authorization
+  # token前缀
+  token-prefix: Bearer
+  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  timeout: 7200
+  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+  active-timeout: 600
+  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  is-concurrent: false
+  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+  is-share: false
+  # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik） 自定义
+  #token-style: random-64
+  # 是否输出操作日志
+  is-log: true
